@@ -104,13 +104,13 @@ export default {
         "Diciembre",
       ];
       let days = [
+        "Domingo",
         "Lunes",
         "Martes",
         "Miércoles",
         "Jueves",
         "Viernes",
         "Sábado",
-        "Domingo",
       ];
       let day = days[d.getDay()];
       let date = d.getDate();
