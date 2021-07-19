@@ -71,9 +71,22 @@ export default {
           .then(this.setResults);
       }
     },
+    fetchWeatherStorage() {
+      if (localStorage.query != "") {
+        fetch(
+          `${this.base_URL}weather?q=${localStorage.query}&units=metric&APPID=${this.apikey}`
+        )
+          .then((res) => {
+            return res.json();
+          })
+          .then(this.setResults);
+      }
+    },
     setResults(results) {
       this.weather = results;
+      localStorage.query = this.query;
     },
+
     dateBuilder() {
       let d = new Date();
       let months = [
@@ -107,6 +120,12 @@ export default {
 
       return `${hours}:${minutes}, ${day} ${date} de ${month}`;
     },
+  },
+  mounted() {
+    if (localStorage.query) {
+      this.query = localStorage.query;
+    }
+    this.fetchWeatherStorage();
   },
 };
 </script>
