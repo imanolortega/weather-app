@@ -2,11 +2,19 @@
   <div
     id="app"
     :class="
-      typeof weather.main != 'undefined' && weather.main.temp > 20 ? 'warm' : ''
+      typeof weather.main != 'undefined' && weather.main.temp > 25
+        ? 'appWarm'
+        : 'appCold'
     "
   >
     <main>
-      <div class="search-box">
+      <div
+        :class="
+          typeof weather.main != 'undefined' && weather.main.temp > 25
+            ? 'warm'
+            : 'cold'
+        "
+      >
         <input
           type="text"
           name=""
@@ -16,18 +24,24 @@
           v-model="query"
           @keypress="fetchWeather"
         />
-      </div>
-
-      <div class="weather-wrap" v-if="typeof weather.main != 'undefined'">
-        <div class="location-box">
-          <div class="location">
-            {{ weather.name }}, {{ weather.sys.country }}
+        <div
+          :class="
+            typeof weather.main != 'undefined' && weather.main.temp > 25
+              ? 'weather-wrap-warm'
+              : 'weather-wrap-cold'
+          "
+          v-if="typeof weather.main != 'undefined'"
+        >
+          <div class="location-box">
+            <div class="location">
+              {{ weather.name }}, {{ weather.sys.country }}
+            </div>
+            <div class="date">{{ dateBuilder() }}</div>
           </div>
-          <div class="date">{{ dateBuilder() }}</div>
-        </div>
-        <div class="weather-box">
-          <div class="temperature">{{ Math.round(weather.main.temp) }}°C</div>
-          <div class="weather">{{ weather.weather[0].main }}</div>
+          <div class="weather-box">
+            <div class="temperature">{{ Math.round(weather.main.temp) }}°C</div>
+            <div class="weather">{{ weather.weather[0].main }}</div>
+          </div>
         </div>
       </div>
     </main>
@@ -106,48 +120,58 @@ export default {
 }
 
 body {
-  font-family: "Inter", sans-serif;
+  font-family: "Quicksand", sans-serif;
 }
 
 #app {
   font-family: inherit;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
   color: #2c3e50;
-  background-image: url("./assets/cold-bg.jpg");
-  background-size: cover;
-  background-position: bottom;
   transition: 0.4s;
 }
 
-#app.warm {
-  background-image: url("./assets/warm-bg.jpg");
+.appWarm {
+  background-image: linear-gradient(135deg, #f97794 10%, #623aa2 100%);
+}
+
+.appCold {
+  background-image: linear-gradient(135deg, #97abff 10%, #123597 100%);
 }
 
 main {
   min-height: 100vh;
-  padding: 25px;
-  background-image: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.15),
-    rgba(0, 0, 0, 0.55)
-  );
+  padding: 45px;
+  display: flex;
+  justify-content: center;
 }
 
-.search-box {
-  width: 100%;
+.cold {
+  padding: 35px;
+  width: 500px;
   margin-bottom: 30px;
+  border-radius: 30px;
+  background-image: url("./assets/cold-bg.jpg");
+  background-size: cover;
+  background-position: bottom;
 }
 
-.search-box .search-bar {
+.warm {
+  padding: 35px;
+  width: 500px;
+  margin-bottom: 30px;
+  border-radius: 30px;
+  background-image: url("./assets/warm-bg.jpg");
+  background-size: cover;
+  background-position: bottom;
+}
+
+.search-bar {
   display: block;
   width: 100%;
   padding: 15px;
-
   color: #313131;
   font-size: 1rem;
-
   appearance: none;
   border: none;
   outline: none;
@@ -157,7 +181,7 @@ main {
   transition: 0.4s;
 }
 
-.search-box .search-bar:focus {
+.search-bar:focus {
   background-color: rgba(255, 255, 255, 0.75);
 }
 
@@ -175,6 +199,20 @@ main {
   font-weight: 500;
   font-style: italic;
   margin: 2px 0px;
+}
+
+.weather-wrap-warm {
+  margin: 20px 0px;
+  border-radius: 20px;
+  padding: 20px;
+  background-image: linear-gradient(135deg, #f97794 10%, #623aa2 100%);
+}
+
+.weather-wrap-cold {
+  margin: 20px 0px;
+  border-radius: 20px;
+  padding: 20px;
+  background-image: linear-gradient(135deg, #97abff 10%, #123597 100%);
 }
 
 .weather-box {
@@ -199,5 +237,23 @@ main {
   text-align: center;
   font-weight: 600;
   letter-spacing: 0.1rem;
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
+  main {
+    padding: 0px;
+  }
+
+  .cold {
+    border-radius: 0px;
+    min-height: 100vh;
+    margin-bottom: 0px;
+  }
+
+  .warm {
+    border-radius: 0px;
+    min-height: 100vh;
+    margin-bottom: 0px;
+  }
 }
 </style>
